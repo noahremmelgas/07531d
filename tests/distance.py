@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #Constants
-f_k = 5 * 10**9
+f_k = 5.160 * 10**9
 f_c = 5 * 10**9
 c = 299792458
 num_subcarriers = 30
@@ -39,7 +39,7 @@ def distance(csi:list, omega:int, n:int):
     return d_LOS, CSI_eff
 
 def main():
-    omega = 10000
+    omega = 1
     n = 1
     filenames = [['loc_30deg_1m', 1], ['loc_30deg_2m', 2], ['loc_30deg_3m', 3], ['loc_30deg_4m', 4], ['loc_30deg_5m', 5], 
              ['loc_minus60deg_1m', 1], ['loc_minus60deg_2m', 2], ['loc_minus60deg_3m', 3], ['loc_minus60deg_4m', 4], ['loc_minus60deg_5m', 5]]
