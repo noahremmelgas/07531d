@@ -29,12 +29,19 @@ def distance(csi:list, omega:int, n:int):
     subcarrier = np.argmax(np.abs(windowed_cir))
     max_value = np.abs(windowed_cir[subcarrier])
 
-    filtered_cir = windowed_cir[0.5*max_value <= np.abs(windowed_cir)]
+    filtered_cir = np.empty(windowed_cir.shape, dtype=complex)
+    for k in range(len(windowed_cir)):
+        if np.abs(windowed_cir[k]) <= 0.5*max_value:
+            filtered_cir[k] = 0
+        else:
+            filtered_cir[k] = windowed_cir[k]
 
-    CSI_eff = (f_c*(5 *10**9 + subcarrier*40)/f_k*np.abs(filtered_cir))
 
+    CSI_eff = ((f_c*(f_k)/f_k*np.abs(filtered_cir)))
 
-    d_LOS = 1/(4*np.pi)*(((c/(f_c*CSI_eff))**2)*omega)**(1/n)
+    CSI_eff = np.mean(CSI_eff)
+
+    d_LOS = 1/(4*np.pi)*((((c/(f_c*CSI_eff))**2)*omega)**(1/n))
 
     return d_LOS, CSI_eff
 
@@ -45,8 +52,9 @@ def main():
              ['loc_minus60deg_1m', 1], ['loc_minus60deg_2m', 2], ['loc_minus60deg_3m', 3], ['loc_minus60deg_4m', 4], ['loc_minus60deg_5m', 5]]
     for file, label in filenames:
         distance_array = np.array([])
+        csi_load = np.load(f"tests/npz_files/{file}.npz")['arr_0']
         for k in range(3):
-            csi = np.load(f"npz_files/{file}.npz")['arr_0'][0:1,0:30,k]
+            csi = csi_load[0:10000,0:30,k]
             d_LOS_array = np.array([])
             for i in csi:
                 i = np.ndarray.flatten(i)
