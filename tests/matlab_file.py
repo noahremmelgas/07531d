@@ -8,7 +8,7 @@ c = 299792458
 data = loadmat('tests/csi_src_test.mat')
 data = data['csi']
 
-data = np.load('tests/npz_files/loc_30deg_1m_reduced.npz')
+data = np.load('tests/npz_files/loc_30deg_4m_reduced.npz')
 data = data['arr_0']
 
 data_shape = data.shape
@@ -26,8 +26,8 @@ half_point = int(ifft_point/2)
 half_sequence = cir_sequence[:, 0:half_point, :]
 
 magnitudes = np.abs(half_sequence)
-peak_values = np.max(magnitudes, axis=1)
-peak_indices = np.argmax(magnitudes, axis=1)
+
+peak_indices = np.argmax(half_sequence, axis=1)
 
 peak_indices = np.squeeze(peak_indices) + 1
 
