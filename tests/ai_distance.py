@@ -7,12 +7,11 @@ import numpy as np
 import h5py
 import pandas as pd
 from numba import njit
-from tensorflow.keras import mixed_precision
+#from tensorflow.keras import mixed_precision
 
 # Set the mixed precision policy
-policy = mixed_precision.Policy('mixed_float16')
-mixed_precision.set_global_policy(policy)
-
+#policy = mixed_precision.Policy('mixed_float16')
+#mixed_precision.set_global_policy(policy)
 tf.config.optimizer.set_jit(True)
 
 
@@ -143,7 +142,7 @@ def train_model(train_data, test_data, epochs = 100, batch_size = 64):
     return model
 
 def prediction(filename):
-    input_data = np.load(f"npz_files/{filename}.npz")
+    input_data = np.load(f"tests/npz_files/{filename}_reduced.npz")
 
     # Preprocess the input data to combine real and imaginary parts
     real_part = input_data['arr_0'].real
@@ -154,43 +153,43 @@ def prediction(filename):
     combined_data = np.expand_dims(combined_data, axis=0)  # Shape: (1, time_steps, 30, 6)
 
     # Load the trained model
-    model = tf.keras.models.load_model('my_model.keras')
+    model = tf.keras.models.load_model('tests/my_model.keras')
     result_array = np.array([])
 
     # Make predictions
-    for i in range(100):
+    for i in range(10):
         result = model.predict(combined_data[0][i:i+1])
         result_array = np.append(result_array, result)
         
     print(np.mean(result_array))
 
 def main():
-    print('Creating datasets')
-    train_ds, test_ds = combine_datasets(filenames)
+    #print('Creating datasets')
+    #train_ds, test_ds = combine_datasets(filenames)
 
-    print('Saving datasets')
-    train_ds.save('datasets/train_ds')
-    test_ds.save('datasets/test_ds')
+    #print('Saving datasets')
+    #train_ds.save('datasets/train_ds')
+    #test_ds.save('datasets/test_ds')
     
-    print('Loading datasets')
-    test_ds = tf.data.Dataset.load('datasets/test_ds')
-    train_ds = tf.data.Dataset.load('datasets/train_ds')
+    #print('Loading datasets')
+    #test_ds = tf.data.Dataset.load('datasets/test_ds')
+    #train_ds = tf.data.Dataset.load('datasets/train_ds')
 
-    train_ds = train_ds.shuffle(buffer_size=train_ds.cardinality())
-    test_ds = test_ds.shuffle(buffer_size=test_ds.cardinality())
+    #train_ds = train_ds.shuffle(buffer_size=train_ds.cardinality())
+    #test_ds = test_ds.shuffle(buffer_size=test_ds.cardinality())
 
-    train_ds = train_ds.take(40000)
-    test_ds = test_ds.take(10000)
+    #train_ds = train_ds.take(40000)
+    #test_ds = test_ds.take(10000)
 
-    train_ds = train_ds.batch(64)
-    test_ds = test_ds.batch(64)
+    #train_ds = train_ds.batch(64)
+    #test_ds = test_ds.batch(64)
 
-    train_ds = train_ds.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
-    test_ds = test_ds.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
+    #train_ds = train_ds.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
+    #test_ds = test_ds.cache().prefetch(buffer_size=tf.data.AUTOTUNE)
     
-    result = train_model(train_ds, test_ds)
+    #result = train_model(train_ds, test_ds)
 
-    result.save('my_model.keras')
+    #result.save('my_model.keras')
     
     for filename, label in filenames:
         prediction(filename)

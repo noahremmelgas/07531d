@@ -36,8 +36,7 @@ def distance(csi:list, omega:int, n:int):
         else:
             filtered_cir[k] = windowed_cir[k]
 
-
-    CSI_eff = ((f_c*(f_k)/f_k*np.abs(filtered_cir)))
+    CSI_eff = ((f_c*(subcarrier*20)/f_k*np.abs(filtered_cir)))
 
     CSI_eff = np.mean(CSI_eff)
 
@@ -52,7 +51,7 @@ def main():
              ['loc_minus60deg_1m', 1], ['loc_minus60deg_2m', 2], ['loc_minus60deg_3m', 3], ['loc_minus60deg_4m', 4], ['loc_minus60deg_5m', 5]]
     for file, label in filenames:
         distance_array = np.array([])
-        csi_load = np.load(f"tests/npz_files/{file}.npz")['arr_0']
+        csi_load = np.load(f"tests/npz_files/{file}_reduced.npz")['arr_0']
         for k in range(3):
             csi = csi_load[0:10000,0:30,k]
             d_LOS_array = np.array([])
