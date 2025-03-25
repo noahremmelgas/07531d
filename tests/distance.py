@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #Constants
-f_k = 5.160 * 10**9
-f_c = 5 * 10**9
+f_k = 4.72 * 10**9
+f_c = 5.320 * 10**9
 c = 299792458
 num_subcarriers = 30
 
@@ -11,23 +11,18 @@ def csi_to_cir(csi):
   cir = np.fft.ifft(csi)
   return cir
 
-#Example with windowing to reduce sidelobes.
 def csi_to_windowed_cir(csi, window=None):
-    if window is not None:
-        if len(window) != len(csi):
-            raise ValueError("Window length must match CSI length.")
-        csi_windowed = csi * window
-        cir = np.fft.ifft(csi_windowed)
-        return cir
+    csi_windowed = csi * 1
+    cir = np.fft.ifft(csi_windowed)
+    return cir
 
-    else:
-        return csi_to_cir(csi)
-    
 def distance(csi:list, omega:int, n:int):
     window = np.hamming(num_subcarriers)
-    windowed_cir = csi_to_windowed_cir(csi, window)
+    windowed_cir = csi_to_windowed_cir(csi, 1)
     subcarrier = np.argmax(np.abs(windowed_cir))
     max_value = np.abs(windowed_cir[subcarrier])
+
+    subcarrier_list = np.arange(0,30)
 
     filtered_cir = np.empty(windowed_cir.shape, dtype=complex)
     for k in range(len(windowed_cir)):
@@ -36,7 +31,11 @@ def distance(csi:list, omega:int, n:int):
         else:
             filtered_cir[k] = windowed_cir[k]
 
-    CSI_eff = ((f_c*(subcarrier*20)/f_k*np.abs(filtered_cir)))
+    filtered_cfr = np.fft.fft(filtered_cir)
+    
+    CSI_eff = f_c*(f_k+np.multiply(subcarrier_list, 40))/f_k
+    
+    CSI_eff = np.abs(np.multiply(CSI_eff, filtered_cfr*window))
 
     CSI_eff = np.mean(CSI_eff)
 
@@ -53,7 +52,7 @@ def main():
         distance_array = np.array([])
         csi_load = np.load(f"tests/npz_files/{file}_reduced.npz")['arr_0']
         for k in range(3):
-            csi = csi_load[0:10000,0:30,k]
+            csi = csi_load[0:100,0:30,k]
             d_LOS_array = np.array([])
             for i in csi:
                 i = np.ndarray.flatten(i)
