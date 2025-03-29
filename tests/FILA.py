@@ -48,8 +48,9 @@ def FILA_distance(csi):
     csi = cir_to_csi(cir_filtered)
     CSI_eff = np.mean(subcarrier_freq / freq * np.abs(cir))
 
-    omega = 200000
-    n = 1
+    omega = 60000**2
+    n = 3
+    
     d_LOS = 1/(4*np.pi) * ((c / (bandwidth * np.abs(CSI_eff)))**2 * omega)**(1/n)
     return d_LOS
 
