@@ -2,8 +2,8 @@ from CSIKit.reader import get_reader
 from CSIKit.util import csitools
 import numpy as np
 
-my_reader = get_reader('tests/measurement.txt')
-csi_data = my_reader.read_file('tests/measurement.txt')
+my_reader = get_reader('tests/measurement.pcap')
+csi_data = my_reader.read_file('tests/measurement.pcap')
 
 csi_matrix, no_frames, no_subcarriers = csitools.get_CSI(csi_data)
 print(csi_matrix)

@@ -153,4 +153,11 @@ data = parseFeitCSI('tests/measurement.txt')
 f = open('tests/parsed_csi.txt', "w")
 
 f.write(f"{parseFeitCSI('tests/measurement.txt')}")
-print(data[0])
+
+
+data_array = np.array(data[0]['csi_matrix'])
+
+for i in range(1, len(data)):
+    data_array = np.concatenate((data_array, data[i]['csi_matrix']), axis=1)
+
+np.savez('csi_data.npz', data_array)

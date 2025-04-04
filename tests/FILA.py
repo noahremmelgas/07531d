@@ -58,10 +58,8 @@ def main():
     #filenames = np.array([['loc_30deg_1m', 1], ['loc_30deg_2m', 2], ['loc_30deg_3m', 3], ['loc_30deg_4m', 4], ['loc_30deg_5m', 5], 
     #         ['loc_minus60deg_1m', 1], ['loc_minus60deg_2m', 2], ['loc_minus60deg_3m', 3], ['loc_minus60deg_4m', 4], ['loc_minus60deg_5m', 5]])
     #file = filenames[0,0]
-    #csi = np.load(f"tests/npz_files/{file}_reduced.npz")['arr_0']
+    csi = np.load(f"tests/csi_data.npz")['arr_0']
 
-    data = loadmat('tests/csi_src_test.mat')
-    csi = data['csi']
 
     csi = np.mean(csi, axis=3) #For Matlab files, not needed for NPZ
 
