@@ -20,7 +20,7 @@ def run_feitcsi():
         except KeyboardInterrupt:
             break
 
-file_name = 'csi_3m.txt'
+file_name = 'files/csi_3m.txt'
 csi_matrix = csi_read.CSIRead.main(file_name)
 
 print(csi_matrix.shape)
