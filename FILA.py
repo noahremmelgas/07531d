@@ -47,7 +47,7 @@ class distance():
         csi = distance.cir_to_csi(cir_filtered)
         CSI_eff = np.mean(distance.subcarrier_freq / distance.freq * np.abs(cir))
 
-        omega = 800000
+        omega = 8000000
         n = 2
 
         d_LOS = 1/(4*np.pi) * ((distance.c / (distance.bandwidth * np.abs(CSI_eff)))**2 * omega)**(1/n)
@@ -61,6 +61,5 @@ class distance():
 
         #csi = np.mean(csi, axis=3) #For Matlab files, not needed for NPZ
 
-        print(csi.shape)
         print(distance.FILA_distance(csi))
 

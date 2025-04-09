@@ -151,7 +151,6 @@ class CSIRead:
 
     def main(file_name):
         data = CSIRead.parseFeitCSI(file_name)
-        print(data)
         if len(data) == 1:
             data_array = np.array(data['csi_matrix'])
         else:
@@ -159,6 +158,8 @@ class CSIRead:
             for i in range(1, len(data)):
                 data_array = np.concatenate((data_array, data[i]['csi_matrix']), axis=2)
 
-        data_array = np.transpose(data_array, (2,0,1))
+        data_array = np.transpose(data_array, axes=(2,0,1))
 
-        return data_array
+        data_array = np.delete(data_array, obj=[7,21,34,48], axis=1)
+
+        return data_array   

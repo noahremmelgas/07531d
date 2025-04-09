@@ -7,22 +7,22 @@ import FILA
 
 def run_feitcsi():
     command = [
-    "sudo", "feitcsi", "--mode", "measureinject", "--frequency", "5180", 
-    "--channel-width", "40", "--format", "HT", "--inject-delay", "10000", "--inject-repeat", "100" 
+    "sudo", "feitcsi", "--mode", "measure", "--frequency", "5180", 
+    "--channel-width", "20", "--format", "HT",
     "--output-file", "/home/noah/Documents/07531d/07531d/csi.txt"
     ]
     try:
-        process = subprocess.run(command)
         while True:
+            with open('csi.txt', 'w') as f:  # Open in write mode ('w') truncates the file
+                f.truncate(0)
             print("Still running")
-            time.sleep(1)
+            for i in range(10):
+                time.sleep(1)
 
-            csi_matrix = csi_read.CSIRead.main('csi.txt')
+                csi_matrix = csi_read.CSIRead.main('csi.txt')
 
-            FILA.distance.main(csi_matrix)
+                FILA.distance.main(csi_matrix)
             
-            with open('csi.txt', 'w'):  # Open in write mode ('w') truncates the file
-                pass
 
             
 
@@ -39,9 +39,7 @@ def run_feitcsi():
 
 run_feitcsi()
 
-csi_matrix = csi_read.CSIRead.main('files/csi_3m.txt')
-FILA.distance.main(csi_matrix)
-csi_matrix = csi_read.CSIRead.main('csi.txt')
+csi_matrix = csi_read.CSIRead.main('files/csi_9m_0d.txt')
 FILA.distance.main(csi_matrix)
 
 
