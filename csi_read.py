@@ -151,11 +151,13 @@ class CSIRead:
 
     def main(file_name):
         data = CSIRead.parseFeitCSI(file_name)
-
-        data_array = np.array(data[0]['csi_matrix'])
-
-        for i in range(1, len(data)):
-            data_array = np.concatenate((data_array, data[i]['csi_matrix']), axis=2)
+        print(data)
+        if len(data) == 1:
+            data_array = np.array(data['csi_matrix'])
+        else:
+            data_array = np.array(data[0]['csi_matrix'])
+            for i in range(1, len(data)):
+                data_array = np.concatenate((data_array, data[i]['csi_matrix']), axis=2)
 
         data_array = np.transpose(data_array, (2,0,1))
 
