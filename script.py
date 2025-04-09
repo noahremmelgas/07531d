@@ -32,7 +32,6 @@ def run_feitcsi():
             time.sleep(2) 
             
     except KeyboardInterrupt:
-        process.terminate()
         return
     
 
