@@ -151,15 +151,22 @@ class CSIRead:
 
     def main(file_name):
         data = CSIRead.parseFeitCSI(file_name)
+        return data
+        sum = 0
+        for i in range(len(data)):
+            sum += data[i]['header']['rssi1']
+            
+        print(f"{sum/(len(data))} + 'RSSI'")
         if len(data) == 1:
             data_array = np.array(data['csi_matrix'])
         else:
             data_array = np.array(data[0]['csi_matrix'])
             for i in range(1, len(data)):
-                data_array = np.concatenate((data_array, data[i]['csi_matrix']), axis=2)
+                if len(data[i]['csi_matrix'][0])== 1:
+                    data_array = np.concatenate((data_array, data[i]['csi_matrix']), axis=2)
 
         data_array = np.transpose(data_array, axes=(2,0,1))
+        #data_array = np.delete(data_array, obj=[32, 100, 166, 234, 274, 342, 408, 476, 519, 587, 653, 721, 761, 829, 895, 963], axis=1)
+        
 
-        data_array = np.delete(data_array, obj=[7,21,34,48], axis=1)
-
-        return data_array   
+        return data_array 
